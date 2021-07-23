@@ -1,0 +1,17 @@
+# load variables from .env file in the root if it exists
+if File.exist?('../.env')
+  open('../.env', 'r').readlines.each do |l|
+    kv = l.split('=')
+    ENV[kv[0]] = kv[1].chomp
+  end
+end
+
+lane :test do
+  upload_to_simplemdm(
+    api_key: ENV["TEST_SIMPLEMDM_API_KEY"],
+    app_id: ENV["TEST_SIMPLEMDM_APP_ID"],
+    ipa_path: './fastlane/app-release.ipa', # optional defaults to IPA_OUTPUT_PATH
+    deploy_to: 'outdated',
+    name: "Fastlane SimpleMDM Test App",
+  )
+end
